@@ -28,7 +28,73 @@
 
 troca(0, 1).
 troca(1, 0).
+
+maiorQue(X, [], 0).
+maiorQue(X, [A | B], Y) :- A < X, maiorQue(X, B, Y1), Y is Y1.
+maiorQue(X, [A | B], Y) :- A >= X, maiorQue(X, B, Y1), Y is Y1 + 1.
+
+eZero([]).
+eZero([A | B]) :- A =:= 0, eZero(B).
+
+pertoDaBorda1(Y) :- Y < 100.
+pertoDaBorda2(X) :- X > 700.
+pertoDaBorda3(Y) :- Y > 500.
+pertoDaBorda4(X) :- X < 100.
+
 % [FORWARD, REVERSE, LEFT, RIGHT, BOOM]
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda1(Y),
+    ANGLE > 1.5 * pi,
+    FORWARD is 0,
+    REVERSE is 1,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 0.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda1(Y),
+    ANGLE < pi / 2,
+    FORWARD is 0,
+    REVERSE is 1,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 0.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    S6 >= 0.7,
+    eZero([S1, S2, S3, S4, S5]),
+    FORWARD is 1,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    S6 >= 0.5,
+    FORWARD is 1,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    maiorQue(0.5, [S1, S2, S3, S4, S5], A),
+    A >= 1,
+    FORWARD is 0,
+    REVERSE is 1,
+    LEFT is 0,
+    RIGHT is 0,
+    BOOM is 0.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    S1 > 0,
+    S2 > 0,
+    FORWARD is 0,
+    REVERSE is 1,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
     random_between(0,1,AA),
     troca(AA, BB),

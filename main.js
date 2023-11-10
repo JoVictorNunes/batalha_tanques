@@ -10,15 +10,15 @@ const dummyTunkNames = /*from chatGPT*/[ "Boladão", "Rabugento", "Trovão", "Ba
 //// Essa área pode ser configurada por você, mas aconselho não trocar o speer, arenaPadding e tamanho dos tanques.
 const speed=1.5, arenaPadding=10, tankW=50, tankH=30,
       score=100, // vida de cada tanque
-      dummyTanks=10, // quantidade de tanques aleatórios
+      dummyTanks=4, // quantidade de tanques aleatórios
       keysTank=true, // modifique para ter um tanque controlado pelo teclado
       // nome dos tanques controlados por Prolog (obs.: tem que adaptar o servidor.pl ao mexer aqui)
       // a quantidade é referente a quantidade de nomes, na falta de criatividade, o nome pode repetir... rs
       // exemplos de dois:
       //prologTanks=["Ligerin", "ApagaFogo"], // se quiser colocar dois tanques proloog, faça assim
       //prologTanks=["Ligerin"], // escolha aqui o nome de seu tanque controlado por prolog
-      prologTanks=[], //se não quiser nenhum tanque prolog, faça assim
-      showSensors=false, //modifique para mostrar os sensores dos tanques PROLOG e KEYS
+      prologTanks=["João", "Victor"], //se não quiser nenhum tanque prolog, faça assim
+      showSensors=true, //modifique para mostrar os sensores dos tanques PROLOG e KEYS
       showSensorsOfDummyTanks=false; //modifique para mostrar os sensores dos tanques DUMMY
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
