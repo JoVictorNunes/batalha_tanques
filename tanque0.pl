@@ -42,58 +42,167 @@ pertoDaBorda3(Y) :- Y > 500.
 pertoDaBorda4(X) :- X < 100.
 
 % [FORWARD, REVERSE, LEFT, RIGHT, BOOM]
+
+% Borda 1 (Topo)
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
     pertoDaBorda1(Y),
     ANGLE > 1.5 * pi,
     FORWARD is 0,
-    REVERSE is 1,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 1.
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda1(Y),
+    ANGLE < pi / 2,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
+% Borda 2 (Direita)
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda2(Y),
+    ANGLE > 1.5 * pi,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda2(Y),
+    ANGLE > pi,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 1.
+
+% Borda 3 (Inferior)
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda3(Y),
+    ANGLE > pi / 2,
+    ANGLE < pi,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 1.
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda3(Y),
+    ANGLE >= pi,
+    ANGLE < 1.5 * pi,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
+% Borda 4 (Esquerda)
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda4(Y),
+    ANGLE =< pi / 2,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 1.
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    pertoDaBorda4(Y),
+    ANGLE > pi / 2,
+    ANGLE < pi,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    S6 >= 0.3,
+    (pertoDaBorda1(Y); pertoDaBorda2(X); pertoDaBorda3(Y); pertoDaBorda4(X)),
+    FORWARD is 1,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    % Se o tanque estiver preso entre dois obstáculos.
+    S6 >= 0.5,
+    maiorQue(0.5, [S1, S2, S3, S4, S5], Q),
+    Q > 2,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    maiorQue(0.5, [S1, S2], Y),
+    eZero([S3, S4, S5]),
+    Y > 0,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    maiorQue(0, [S1, S2], Y),
+    eZero([S3, S4, S5]),
+    Y > 0,
+    FORWARD is 1,
+    REVERSE is 0,
+    LEFT is 1,
+    RIGHT is 0,
+    BOOM is 0.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    maiorQue(0.5, [S4, S5], Y),
+    eZero([S1, S2, S3]),
+    Y > 0,
+    FORWARD is 0,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 1,
+    BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    maiorQue(0, [S4, S5], Y),
+    eZero([S1, S2, S3]),
+    Y > 0,
+    FORWARD is 1,
+    REVERSE is 0,
     LEFT is 0,
     RIGHT is 1,
     BOOM is 0.
 
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    pertoDaBorda1(Y),
-    ANGLE < pi / 2,
-    FORWARD is 0,
-    REVERSE is 1,
-    LEFT is 1,
-    RIGHT is 0,
-    BOOM is 0.
-
-obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    S6 >= 0.7,
+    S6 >= 0,
     eZero([S1, S2, S3, S4, S5]),
     FORWARD is 1,
     REVERSE is 0,
-    LEFT is 0,
-    RIGHT is 0,
-    BOOM is 1.
-
-obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    S6 >= 0.5,
-    FORWARD is 1,
-    REVERSE is 0,
-    LEFT is 0,
-    RIGHT is 0,
-    BOOM is 1.
-
-obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    maiorQue(0.5, [S1, S2, S3, S4, S5], A),
-    A >= 1,
-    FORWARD is 0,
-    REVERSE is 1,
-    LEFT is 0,
+    LEFT is 1,
     RIGHT is 0,
     BOOM is 0.
 
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
-    S1 > 0,
-    S2 > 0,
+    maiorQue(0.5, [S1, S2, S3, S4, S5], A),
+    A =:= 5,
     FORWARD is 0,
     REVERSE is 1,
-    LEFT is 1,
+    LEFT is 0,
     RIGHT is 0,
     BOOM is 1.
+
+obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
+    eZero([S1, S2, S3, S4, S5, S6]),
+    FORWARD is 1,
+    REVERSE is 0,
+    LEFT is 0,
+    RIGHT is 0,
+    BOOM is 0.
 
 obter_controles([X,Y,ANGLE,S1,S2,S3,S4,S5,S6,SCORE], [FORWARD, REVERSE, LEFT, RIGHT, BOOM]) :-
     random_between(0,1,AA),
